@@ -1,0 +1,1209 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CN Blogger SEO Auditor</title>
+
+<style>
+*{
+  box-sizing:border-box;
+}
+
+:root{
+  --bg:#080b12;
+  --card:#10151f;
+  --card2:#151b27;
+  --border:#242c3a;
+  --text:#f5f7fb;
+  --muted:#8f9bad;
+  --primary:#6d5dfc;
+  --primary2:#8b7cff;
+  --green:#20c997;
+  --yellow:#ffc107;
+  --red:#ff5c6c;
+  --blue:#4da3ff;
+  --shadow:0 20px 60px rgba(0,0,0,.35);
+}
+
+body{
+  margin:0;
+  background:
+    radial-gradient(circle at 15% 10%,rgba(109,93,252,.14),transparent 30%),
+    radial-gradient(circle at 90% 80%,rgba(77,163,255,.08),transparent 30%),
+    var(--bg);
+  color:var(--text);
+  font-family:Arial,"Tahoma",sans-serif;
+}
+
+.cn-wrap{
+  max-width:1200px;
+  margin:auto;
+  padding:30px 16px 60px;
+}
+
+.cn-header{
+  text-align:center;
+  margin-bottom:28px;
+}
+
+.cn-logo{
+  width:64px;
+  height:64px;
+  margin:auto;
+  border-radius:18px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  background:linear-gradient(135deg,var(--primary),#3d8bfd);
+  font-size:22px;
+  font-weight:900;
+  box-shadow:0 15px 40px rgba(109,93,252,.3);
+}
+
+.cn-header h1{
+  margin:16px 0 8px;
+  font-size:34px;
+  font-weight:900;
+}
+
+.cn-header h1 span{
+  color:var(--primary2);
+}
+
+.cn-header p{
+  margin:0;
+  color:var(--muted);
+  font-size:15px;
+}
+
+.cn-input-card{
+  background:rgba(16,21,31,.9);
+  border:1px solid var(--border);
+  border-radius:22px;
+  padding:20px;
+  box-shadow:var(--shadow);
+}
+
+.cn-label{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  margin-bottom:10px;
+  font-weight:bold;
+}
+
+.cn-label small{
+  color:var(--muted);
+  font-weight:normal;
+}
+
+#cnCode{
+  width:100%;
+  min-height:300px;
+  resize:vertical;
+  background:#080c13;
+  color:#dce4f2;
+  border:1px solid var(--border);
+  border-radius:15px;
+  padding:18px;
+  outline:none;
+  font-family:Consolas,monospace;
+  font-size:14px;
+  line-height:1.8;
+  direction:ltr;
+  text-align:left;
+}
+
+#cnCode:focus{
+  border-color:var(--primary);
+  box-shadow:0 0 0 3px rgba(109,93,252,.12);
+}
+
+.cn-actions{
+  display:flex;
+  gap:10px;
+  margin-top:14px;
+  flex-wrap:wrap;
+}
+
+.cn-btn{
+  border:0;
+  border-radius:12px;
+  padding:13px 20px;
+  cursor:pointer;
+  font-weight:bold;
+  font-size:14px;
+  transition:.2s;
+}
+
+.cn-btn:hover{
+  transform:translateY(-2px);
+}
+
+.cn-primary{
+  color:white;
+  background:linear-gradient(135deg,var(--primary),#4d8dff);
+  box-shadow:0 10px 25px rgba(109,93,252,.22);
+}
+
+.cn-secondary{
+  background:var(--card2);
+  color:var(--text);
+  border:1px solid var(--border);
+}
+
+.cn-results{
+  display:none;
+  margin-top:25px;
+}
+
+.cn-top-grid{
+  display:grid;
+  grid-template-columns:280px 1fr;
+  gap:18px;
+}
+
+.cn-score-card,
+.cn-overview{
+  background:rgba(16,21,31,.95);
+  border:1px solid var(--border);
+  border-radius:22px;
+  padding:22px;
+  box-shadow:var(--shadow);
+}
+
+.cn-score-card{
+  text-align:center;
+}
+
+.cn-score-circle{
+  width:190px;
+  height:190px;
+  border-radius:50%;
+  margin:5px auto 18px;
+  display:flex;
+  flex-direction:column;
+  justify-content:center;
+  align-items:center;
+  position:relative;
+  background:conic-gradient(var(--primary) 0deg,var(--primary) 0deg,#202735 0deg);
+}
+
+.cn-score-circle:before{
+  content:"";
+  position:absolute;
+  width:148px;
+  height:148px;
+  border-radius:50%;
+  background:var(--card);
+}
+
+.cn-score-number,
+.cn-score-label{
+  position:relative;
+  z-index:2;
+}
+
+.cn-score-number{
+  font-size:46px;
+  font-weight:900;
+}
+
+.cn-score-label{
+  color:var(--muted);
+  font-size:12px;
+}
+
+.cn-status{
+  font-weight:bold;
+  font-size:17px;
+}
+
+.cn-overview h2,
+.cn-section h2{
+  margin-top:0;
+  font-size:19px;
+}
+
+.cn-stats{
+  display:grid;
+  grid-template-columns:repeat(4,1fr);
+  gap:12px;
+}
+
+.cn-stat{
+  background:var(--card2);
+  border:1px solid var(--border);
+  padding:17px;
+  border-radius:15px;
+}
+
+.cn-stat strong{
+  display:block;
+  font-size:25px;
+  margin-bottom:5px;
+}
+
+.cn-stat span{
+  color:var(--muted);
+  font-size:12px;
+}
+
+.cn-sections{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:18px;
+  margin-top:18px;
+}
+
+.cn-section{
+  background:rgba(16,21,31,.95);
+  border:1px solid var(--border);
+  border-radius:22px;
+  padding:22px;
+}
+
+.cn-section.full{
+  grid-column:1/-1;
+}
+
+.cn-check{
+  display:flex;
+  align-items:flex-start;
+  gap:12px;
+  padding:14px 0;
+  border-bottom:1px solid var(--border);
+}
+
+.cn-check:last-child{
+  border-bottom:0;
+}
+
+.cn-icon{
+  min-width:30px;
+  height:30px;
+  border-radius:9px;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  font-weight:bold;
+}
+
+.cn-good .cn-icon{
+  background:rgba(32,201,151,.12);
+  color:var(--green);
+}
+
+.cn-warning .cn-icon{
+  background:rgba(255,193,7,.12);
+  color:var(--yellow);
+}
+
+.cn-error .cn-icon{
+  background:rgba(255,92,108,.12);
+  color:var(--red);
+}
+
+.cn-info .cn-icon{
+  background:rgba(77,163,255,.12);
+  color:var(--blue);
+}
+
+.cn-check strong{
+  display:block;
+  margin-bottom:4px;
+}
+
+.cn-check p{
+  margin:0;
+  color:var(--muted);
+  line-height:1.7;
+  font-size:13px;
+}
+
+.cn-keywords{
+  display:flex;
+  flex-wrap:wrap;
+  gap:8px;
+}
+
+.cn-keyword{
+  padding:8px 12px;
+  border-radius:9px;
+  background:var(--card2);
+  border:1px solid var(--border);
+  font-size:13px;
+}
+
+.cn-keyword b{
+  color:var(--primary2);
+}
+
+.cn-footer{
+  text-align:center;
+  margin-top:25px;
+  color:var(--muted);
+  font-size:12px;
+}
+
+.cn-copy{
+  margin-top:12px;
+  width:100%;
+}
+
+.cn-empty{
+  text-align:center;
+  color:var(--muted);
+  padding:30px;
+}
+
+@media(max-width:850px){
+  .cn-top-grid{
+    grid-template-columns:1fr;
+  }
+
+  .cn-sections{
+    grid-template-columns:1fr;
+  }
+
+  .cn-section.full{
+    grid-column:auto;
+  }
+}
+
+@media(max-width:600px){
+  .cn-wrap{
+    padding:20px 10px 40px;
+  }
+
+  .cn-header h1{
+    font-size:26px;
+  }
+
+  .cn-stats{
+    grid-template-columns:1fr 1fr;
+  }
+
+  .cn-score-circle{
+    width:165px;
+    height:165px;
+  }
+
+  .cn-score-circle:before{
+    width:128px;
+    height:128px;
+  }
+
+  .cn-score-number{
+    font-size:40px;
+  }
+}
+</style>
+</head>
+
+<body>
+
+<div class="cn-wrap">
+
+  <header class="cn-header">
+    <div class="cn-logo">CN</div>
+    <h1>CN <span>Blogger SEO Auditor</span></h1>
+    <p>حلل كود مقالك واكتشف مشاكل SEO وتحسينات بلوجر في ثوانٍ</p>
+  </header>
+
+  <div class="cn-input-card">
+
+    <div class="cn-label">
+      <span>HTML المقال</span>
+      <small id="cnCounter">0 حرف</small>
+    </div>
+
+    <textarea id="cnCode" placeholder="الصق HTML المقال هنا...
+
+مثال:
+<h1>عنوان المقال</h1>
+<p>محتوى المقال...</p>
+<h2>عنوان فرعي</h2>
+<img src=&quot;image.jpg&quot; alt=&quot;وصف الصورة&quot;>"></textarea>
+
+    <div class="cn-actions">
+      <button class="cn-btn cn-primary" onclick="CNAnalyze()">
+        بدء تحليل SEO
+      </button>
+
+      <button class="cn-btn cn-secondary" onclick="CNClear()">
+        مسح
+      </button>
+    </div>
+
+  </div>
+
+  <div id="cnResults" class="cn-results">
+
+    <div class="cn-top-grid">
+
+      <div class="cn-score-card">
+
+        <div id="cnCircle" class="cn-score-circle">
+          <span id="cnScore" class="cn-score-number">0</span>
+          <span class="cn-score-label">SEO SCORE</span>
+        </div>
+
+        <div id="cnStatus" class="cn-status">ابدأ التحليل</div>
+
+        <button class="cn-btn cn-secondary cn-copy" onclick="CNCopyReport()">
+          نسخ التقرير
+        </button>
+
+      </div>
+
+      <div class="cn-overview">
+
+        <h2>نظرة عامة على المقال</h2>
+
+        <div class="cn-stats">
+
+          <div class="cn-stat">
+            <strong id="statWords">0</strong>
+            <span>كلمة</span>
+          </div>
+
+          <div class="cn-stat">
+            <strong id="statChars">0</strong>
+            <span>حرف</span>
+          </div>
+
+          <div class="cn-stat">
+            <strong id="statImages">0</strong>
+            <span>صورة</span>
+          </div>
+
+          <div class="cn-stat">
+            <strong id="statLinks">0</strong>
+            <span>رابط</span>
+          </div>
+
+          <div class="cn-stat">
+            <strong id="statH1">0</strong>
+            <span>H1</span>
+          </div>
+
+          <div class="cn-stat">
+            <strong id="statH2">0</strong>
+            <span>H2</span>
+          </div>
+
+          <div class="cn-stat">
+            <strong id="statH3">0</strong>
+            <span>H3</span>
+          </div>
+
+          <div class="cn-stat">
+            <strong id="statIssues">0</strong>
+            <span>مشاكل</span>
+          </div>
+
+        </div>
+
+      </div>
+
+    </div>
+
+    <div class="cn-sections">
+
+      <div class="cn-section">
+        <h2>SEO الأساسي</h2>
+        <div id="basicSEO"></div>
+      </div>
+
+      <div class="cn-section">
+        <h2>العناوين والمحتوى</h2>
+        <div id="contentSEO"></div>
+      </div>
+
+      <div class="cn-section">
+        <h2>الصور والروابط</h2>
+        <div id="mediaSEO"></div>
+      </div>
+
+      <div class="cn-section">
+        <h2>Social SEO</h2>
+        <div id="socialSEO"></div>
+      </div>
+
+      <div class="cn-section full">
+        <h2>الكلمات الأكثر تكرارًا</h2>
+        <div id="keywords" class="cn-keywords"></div>
+      </div>
+
+      <div class="cn-section full">
+        <h2>التوصيات والمشاكل</h2>
+        <div id="recommendations"></div>
+      </div>
+
+    </div>
+
+  </div>
+
+  <div class="cn-footer">
+    CN Blogger SEO Auditor — أداة مجانية لتحليل مقالات بلوجر
+  </div>
+
+</div>
+
+<script>
+const cnCode = document.getElementById("cnCode");
+const cnCounter = document.getElementById("cnCounter");
+
+cnCode.addEventListener("input",()=>{
+  cnCounter.textContent =
+    cnCode.value.length.toLocaleString("ar-EG")+" حرف";
+});
+
+let cnReport = [];
+
+function cnAdd(type,title,text,container){
+
+  cnReport.push({
+    type,
+    title,
+    text
+  });
+
+  const box = document.createElement("div");
+
+  box.className = "cn-check cn-"+type;
+
+  let icon = "✓";
+
+  if(type==="warning") icon="!";
+  if(type==="error") icon="×";
+  if(type==="info") icon="i";
+
+  box.innerHTML = `
+    <div class="cn-icon">${icon}</div>
+    <div>
+      <strong>${cnEscape(title)}</strong>
+      <p>${cnEscape(text)}</p>
+    </div>
+  `;
+
+  container.appendChild(box);
+}
+
+function cnEscape(str){
+
+  return String(str)
+    .replace(/&/g,"&amp;")
+    .replace(/</g,"&lt;")
+    .replace(/>/g,"&gt;")
+    .replace(/"/g,"&quot;")
+    .replace(/'/g,"&#039;");
+}
+
+function CNAnalyze(){
+
+  const code = cnCode.value.trim();
+
+  if(!code){
+
+    alert("من فضلك الصق HTML المقال أولاً.");
+    return;
+  }
+
+  cnReport=[];
+
+  const parser = new DOMParser();
+  const doc = parser.parseFromString(code,"text/html");
+
+  const basic = document.getElementById("basicSEO");
+  const content = document.getElementById("contentSEO");
+  const media = document.getElementById("mediaSEO");
+  const social = document.getElementById("socialSEO");
+  const rec = document.getElementById("recommendations");
+
+  basic.innerHTML="";
+  content.innerHTML="";
+  media.innerHTML="";
+  social.innerHTML="";
+  rec.innerHTML="";
+
+  let score=100;
+  let errors=0;
+
+  const title =
+    doc.querySelector("title")?.textContent.trim() || "";
+
+  const description =
+    doc.querySelector('meta[name="description"]')
+      ?.getAttribute("content")?.trim() || "";
+
+  const canonical =
+    doc.querySelector('link[rel="canonical"]')
+      ?.getAttribute("href")?.trim() || "";
+
+  const h1=doc.querySelectorAll("h1");
+  const h2=doc.querySelectorAll("h2");
+  const h3=doc.querySelectorAll("h3");
+
+  const images=doc.querySelectorAll("img");
+  const links=doc.querySelectorAll("a");
+
+  const text=(doc.body.innerText || "")
+    .replace(/\s+/g," ")
+    .trim();
+
+  const words=text
+    ? text.split(/\s+/).length
+    : 0;
+
+  /* Title */
+
+  if(title){
+
+    if(title.length>=30 && title.length<=60){
+
+      cnAdd(
+        "good",
+        "عنوان الصفحة مناسب",
+        "عنوان الصفحة موجود وطوله مناسب تقريبًا لمحركات البحث.",
+        basic
+      );
+
+    }else{
+
+      score-=7;
+      errors++;
+
+      cnAdd(
+        "warning",
+        "طول العنوان يحتاج مراجعة",
+        "يفضل أن يكون عنوان الصفحة واضحًا ومختصرًا، وغالبًا ضمن نطاق 30 إلى 60 حرفًا.",
+        basic
+      );
+    }
+
+  }else{
+
+    score-=12;
+    errors++;
+
+    cnAdd(
+      "error",
+      "لا يوجد Title",
+      "لم يتم العثور على وسم title في الكود.",
+      basic
+    );
+  }
+
+  /* Description */
+
+  if(description){
+
+    if(description.length>=120 && description.length<=160){
+
+      cnAdd(
+        "good",
+        "Meta Description جيدة",
+        "الوصف موجود وطوله مناسب تقريبًا.",
+        basic
+      );
+
+    }else{
+
+      score-=6;
+      errors++;
+
+      cnAdd(
+        "warning",
+        "Meta Description تحتاج مراجعة",
+        "الوصف موجود لكنه قصير أو طويل نسبيًا.",
+        basic
+      );
+    }
+
+  }else{
+
+    score-=10;
+    errors++;
+
+    cnAdd(
+      "error",
+      "Meta Description غير موجودة",
+      "أضف وصفًا واضحًا يشرح محتوى الصفحة.",
+      basic
+    );
+  }
+
+  /* Canonical */
+
+  if(canonical){
+
+    cnAdd(
+      "good",
+      "Canonical موجود",
+      "تم العثور على رابط canonical.",
+      basic
+    );
+
+  }else{
+
+    score-=4;
+
+    cnAdd(
+      "warning",
+      "Canonical غير موجود",
+      "وجود canonical يساعد على تحديد النسخة الأساسية من الصفحة.",
+      basic
+    );
+  }
+
+  /* H1 */
+
+  if(h1.length===1){
+
+    cnAdd(
+      "good",
+      "H1 ممتاز",
+      "تم العثور على H1 واحد.",
+      content
+    );
+
+  }else if(h1.length===0){
+
+    score-=10;
+    errors++;
+
+    cnAdd(
+      "error",
+      "لا يوجد H1",
+      "يجب أن يحتوي المقال عادةً على عنوان رئيسي واضح.",
+      content
+    );
+
+  }else{
+
+    score-=5;
+    errors++;
+
+    cnAdd(
+      "warning",
+      "يوجد أكثر من H1",
+      "يفضل مراجعة بنية العناوين واستخدام H1 للعنوان الرئيسي فقط.",
+      content
+    );
+  }
+
+  /* H2 */
+
+  if(h2.length){
+
+    cnAdd(
+      "good",
+      "العناوين الفرعية موجودة",
+      `تم العثور على ${h2.length} عنوان H2.`,
+      content
+    );
+
+  }else{
+
+    score-=3;
+
+    cnAdd(
+      "warning",
+      "لا توجد عناوين H2",
+      "إذا كان المقال طويلًا، استخدم H2 لتقسيم المحتوى إلى أقسام واضحة.",
+      content
+    );
+  }
+
+  /* Word count */
+
+  if(words>=600){
+
+    cnAdd(
+      "good",
+      "حجم المحتوى جيد",
+      `تم اكتشاف حوالي ${words} كلمة.`,
+      content
+    );
+
+  }else{
+
+    score-=5;
+
+    cnAdd(
+      "warning",
+      "المحتوى قصير نسبيًا",
+      `تم اكتشاف حوالي ${words} كلمة فقط. جودة المحتوى أهم من عدد الكلمات، لكن المقال القصير قد يحتاج إلى مزيد من التفاصيل إذا كان الموضوع يتطلب ذلك.`,
+      content
+    );
+  }
+
+  /* Images */
+
+  let noAlt=0;
+
+  images.forEach(img=>{
+    if(!img.getAttribute("alt") ||
+       !img.getAttribute("alt").trim()){
+      noAlt++;
+    }
+  });
+
+  if(images.length===0){
+
+    cnAdd(
+      "info",
+      "لا توجد صور",
+      "يمكن استخدام صور مناسبة عند الحاجة لتحسين تجربة القراءة.",
+      media
+    );
+
+  }else if(noAlt===0){
+
+    cnAdd(
+      "good",
+      "Alt للصور جيد",
+      `تم فحص ${images.length} صورة وجميعها تحتوي على alt.`,
+      media
+    );
+
+  }else{
+
+    score-=Math.min(10,noAlt*2);
+    errors++;
+
+    cnAdd(
+      "error",
+      "صور بدون Alt",
+      `هناك ${noAlt} صورة بدون نص بديل alt.`,
+      media
+    );
+  }
+
+  /* Links */
+
+  let internal=0;
+  let external=0;
+
+  links.forEach(a=>{
+
+    const href=a.getAttribute("href");
+
+    if(!href) return;
+
+    if(
+      href.startsWith("/") ||
+      href.includes(location.hostname)
+    ){
+      internal++;
+    }else if(
+      href.startsWith("http://") ||
+      href.startsWith("https://")
+    ){
+      external++;
+    }
+
+  });
+
+  if(internal){
+
+    cnAdd(
+      "good",
+      "روابط داخلية موجودة",
+      `تم العثور على ${internal} رابط داخلي.`,
+      media
+    );
+
+  }else{
+
+    score-=3;
+
+    cnAdd(
+      "warning",
+      "لا توجد روابط داخلية",
+      "أضف روابط داخلية ذات صلة عندما يكون ذلك مفيدًا للقارئ.",
+      media
+    );
+  }
+
+  if(external){
+
+    cnAdd(
+      "good",
+      "روابط خارجية موجودة",
+      `تم العثور على ${external} رابط خارجي.`,
+      media
+    );
+
+  }else{
+
+    cnAdd(
+      "info",
+      "لا توجد روابط خارجية",
+      "ليس من الضروري إضافة روابط خارجية إلا عندما تكون مفيدة وموثوقة.",
+      media
+    );
+  }
+
+  /* Open Graph */
+
+  const ogTitle =
+    doc.querySelector('meta[property="og:title"]');
+
+  const ogDescription =
+    doc.querySelector('meta[property="og:description"]');
+
+  const ogImage =
+    doc.querySelector('meta[property="og:image"]');
+
+  if(ogTitle && ogDescription && ogImage){
+
+    cnAdd(
+      "good",
+      "Open Graph مكتمل",
+      "تم العثور على og:title وog:description وog:image.",
+      social
+    );
+
+  }else{
+
+    score-=5;
+
+    cnAdd(
+      "warning",
+      "Open Graph غير مكتمل",
+      "يفضل إضافة بيانات Open Graph لتحسين شكل مشاركة الصفحة على المنصات الاجتماعية.",
+      social
+    );
+  }
+
+  /* Twitter */
+
+  const twitterCard =
+    doc.querySelector('meta[name="twitter:card"]');
+
+  if(twitterCard){
+
+    cnAdd(
+      "good",
+      "Twitter Card موجود",
+      "تم العثور على Twitter Card.",
+      social
+    );
+
+  }else{
+
+    cnAdd(
+      "info",
+      "Twitter Card غير موجود",
+      "يمكن إضافة Twitter Card لتحسين معاينة الرابط على المنصات التي تدعمها.",
+      social
+    );
+  }
+
+  /* Keywords */
+
+  const stopWords = new Set([
+    "من","في","على","إلى","عن","مع","هذا","هذه","ذلك",
+    "هناك","يمكن","عند","بعد","قبل","كما","هو","هي",
+    "أن","إن","و","أو","ثم","تم","لا","ما","كان",
+    "كانت","يتم","كل","أي","the","and","for","with",
+    "this","that","from","are","you","your"
+  ]);
+
+  const frequency={};
+
+  text
+    .toLowerCase()
+    .replace(/[^\u0600-\u06FFa-zA-Z0-9\s]/g," ")
+    .split(/\s+/)
+    .forEach(word=>{
+
+      if(
+        word.length<3 ||
+        stopWords.has(word)
+      ) return;
+
+      frequency[word]=(frequency[word]||0)+1;
+
+    });
+
+  const topWords=Object.entries(frequency)
+    .sort((a,b)=>b[1]-a[1])
+    .slice(0,15);
+
+  const keywords=document.getElementById("keywords");
+
+  keywords.innerHTML="";
+
+  if(topWords.length){
+
+    topWords.forEach(([word,count])=>{
+
+      const item=document.createElement("div");
+
+      item.className="cn-keyword";
+
+      item.innerHTML=
+        `${cnEscape(word)} <b>${count}</b>`;
+
+      keywords.appendChild(item);
+
+    });
+
+  }else{
+
+    keywords.innerHTML=
+      '<div class="cn-empty">لم يتم العثور على كلمات كافية للتحليل.</div>';
+  }
+
+  /* Stats */
+
+  document.getElementById("statWords").textContent =
+    words.toLocaleString("en-US");
+
+  document.getElementById("statChars").textContent =
+    text.length.toLocaleString("en-US");
+
+  document.getElementById("statImages").textContent =
+    images.length;
+
+  document.getElementById("statLinks").textContent =
+    links.length;
+
+  document.getElementById("statH1").textContent =
+    h1.length;
+
+  document.getElementById("statH2").textContent =
+    h2.length;
+
+  document.getElementById("statH3").textContent =
+    h3.length;
+
+  document.getElementById("statIssues").textContent =
+    errors;
+
+  /* Score */
+
+  score=Math.max(0,Math.min(100,score));
+
+  const circle=document.getElementById("cnCircle");
+
+  circle.style.background=
+    `conic-gradient(var(--primary) ${score*3.6}deg,#202735 ${score*3.6}deg)`;
+
+  document.getElementById("cnScore").textContent=score;
+
+  let status="ممتاز";
+
+  if(score<90) status="جيد جدًا";
+  if(score<75) status="يحتاج تحسين";
+  if(score<60) status="يحتاج مراجعة";
+  if(score<40) status="ضعيف";
+
+  document.getElementById("cnStatus").textContent=status;
+
+  /* Recommendations */
+
+  const recs=[];
+
+  if(!title)
+    recs.push("أضف عنوانًا واضحًا للصفحة.");
+
+  if(!description)
+    recs.push("أضف Meta Description مخصصة للمقال.");
+
+  if(h1.length!==1)
+    recs.push("راجع استخدام H1 واجعله للعنوان الرئيسي.");
+
+  if(noAlt)
+    recs.push("أضف alt وصفيًا للصور المهمة.");
+
+  if(!internal)
+    recs.push("أضف روابط داخلية مرتبطة بموضوع المقال.");
+
+  if(!ogTitle || !ogDescription || !ogImage)
+    recs.push("راجع بيانات Open Graph الخاصة بالمشاركة الاجتماعية.");
+
+  if(!recs.length){
+
+    cnAdd(
+      "good",
+      "لا توجد مشاكل رئيسية",
+      "الأداة لم تجد مشاكل أساسية إضافية في العناصر التي تم فحصها.",
+      rec
+    );
+
+  }else{
+
+    recs.forEach(r=>{
+      cnAdd(
+        "warning",
+        "اقتراح تحسين",
+        r,
+        rec
+      );
+    });
+  }
+
+  document.getElementById("cnResults").style.display="block";
+
+  setTimeout(()=>{
+    document.getElementById("cnResults")
+      .scrollIntoView({
+        behavior:"smooth",
+        block:"start"
+      });
+  },100);
+
+}
+
+function CNClear(){
+
+  cnCode.value="";
+  cnCounter.textContent="0 حرف";
+
+  document.getElementById("cnResults").style.display="none";
+
+  cnReport=[];
+}
+
+function CNCopyReport(){
+
+  if(!cnReport.length) return;
+
+  const score=
+    document.getElementById("cnScore").textContent;
+
+  let report=
+    "CN Blogger SEO Auditor\n"+
+    "SEO Score: "+score+"/100\n\n";
+
+  cnReport.forEach(item=>{
+
+    report+=
+      "["+
+      item.type.toUpperCase()+
+      "] "+
+      item.title+
+      "\n"+
+      item.text+
+      "\n\n";
+
+  });
+
+  navigator.clipboard.writeText(report)
+    .then(()=>{
+      alert("تم نسخ تقرير SEO بنجاح.");
+    })
+    .catch(()=>{
+      alert("تعذر نسخ التقرير تلقائيًا.");
+    });
+}
+</script>
+
+</body>
+                                      </html>
